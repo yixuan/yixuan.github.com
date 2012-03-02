@@ -19,13 +19,7 @@ tags:
 - 速度
 ---
 
-> 
-
-> 
 > ## _In short, because we are greedy._
-> 
-> 
-
 
 
 今天看到一篇文章，是[介绍一门编程语言Julia的](http://sd.csdn.net/a/20120223/312315.html)。文章底下的评论有些扎眼，建议移步看它的[英文原文](http://julialang.org/blog/2012/02/why-we-created-julia/)。文章的作者，同时也是这门语言的创始人之一，[Stefan Karpinski](http://karpinski.org/)，目前是加州大学圣踏芭芭拉分校的一名博士生，但曾经在若干家企业工作过。他自称是一名数据科学家和应用数学家，最近发表的一篇论文题目叫作_Non-Parametric Discrete Mixture Model Recovery via NNMF_。看到这里我隐约感觉到，这门语言有可能是我感兴趣的。
@@ -40,7 +34,6 @@ Julia的官方网站是[http://julialang.org/](http://julialang.org/)，源代�
 
 Julia:
 
-    
     function fun1j()
         m = zeros(1000, 1000)
         s = 0
