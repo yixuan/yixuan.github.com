@@ -16,16 +16,19 @@ tags:
 - 道
 ---
 
-先引一则Joke，来自于_Autoconf_手册的第一章：
+先引一则Joke，来自于*Autoconf*手册的第一章：
 
 
 > A physicist, an engineer, and a computer scientist were discussing the nature of God.
-"Surely a Physicist," said the physicist, "because early in the Creation, God made Light; and you know, Maxwell's equations, the dual nature of electromagnetic waves, the relativistic consequences..."
-"An Engineer!," said the engineer, "because before making Light, God split the Chaos into Land and Water; it takes a hell of an engineer to handle that big amount of mud, and orderly separation of solids from liquids..."
-The computer scientist shouted: "And the Chaos, where do you think it was coming from, hmm?"
+> 
+> "Surely a Physicist," said the physicist, "because early in the Creation, God made Light; and you know, Maxwell's equations, the dual nature of electromagnetic waves, the relativistic consequences..."
+> 
+> "An Engineer!," said the engineer, "because before making Light, God split the Chaos into Land and Water; it takes a hell of an engineer to handle that big amount of mud, and orderly separation of solids from liquids..."
+> 
+> The computer scientist shouted: "And the Chaos, where do you think it was coming from, hmm?"
 
 
-最近又在瞎折腾东西。不知是哪天脑子突然短路，决定去碰一碰传说中的上古神器Vim，于是怀着无比敬畏的心情敲下了sudo apt-get install vim。一阵云烟飘过，便来到了神器面前。跟着里面自带的30分钟入门教程还有网上的一些讲解，好歹算是把右脚踏进了门里面。左h右l上k下j，O前o后g头G尾，不得不说用Vim写东西真的跟弹琴一样。
+最近又在瞎折腾东西。不知是哪天脑子突然短路，决定去碰一碰传说中的上古神器Vim，于是怀着无比敬畏的心情敲下了`sudo apt-get install vim`。一阵云烟飘过，便来到了神器面前。跟着里面自带的30分钟入门教程还有网上的一些讲解，好歹算是把右脚踏进了门里面。左h右l上k下j，O前o后g头G尾，不得不说用Vim写东西真的跟弹琴一样。
 
 在Ubuntu下玩了一阵子，觉得Vim确实是一个Very Interesting Modifier，于是准备在Windows下也培养培养感情，要不然拿着一个记事本也不好意思见人啊。 在网上下好了相关的文件，打开Vim，感觉默认的字体不怎么好看（应该就是记事本的那种字体），而相比之下Ubuntu下的字体却很清爽，于是准备把字体给换了。上网搜了些教程，也下载试了一些别人推荐的字体，但要么是来历不明（比如各种版本的YaHei），要么是对中文无效，总之折腾了半天还是很乱。此外一个很头疼的问题是等宽字体，英文字体要等宽不是什么难事，但中文就麻烦了，如果要让中文的宽度等于两倍的英文，那么要么是英文太瘦，要么是中文太宽，总之很难协调好。
 

@@ -30,9 +30,9 @@ tags:
 
 好不容易自信满满准备把程序嵌到R中，才发现灾难又来临了。R是一个跨平台的软件，编写的程序包也应该尽量满足这个特性。但是我经常发现Windows下配置好的源代码放到Linux下无法编译，Linux下配置好了Windows又不行了，所以没办法，还得把configure脚本学一学，于是上网搜了半天，知道要先用autoscan生成configure.ac，然后用auroheader生成config.h.in，最后用autoconf生成configure什么的。而直到现在，依然有很多问题没有解决，比如R需要另外生成一个configure.win文件，用来在Windows下进行配置，但是我在网上没有找到什么文献，所以只能作罢。
 
-记得老大之前说过一句话，就是程序员和网页设计者最抓狂的事就是要面向不同的平台编写不同的代码，这几天也实在是被跨平台的问题折磨得不轻。不过好在这几天趁机把C语言又学习了一番，而且还了解到更多的与GNU有关的内容，算是意外的收获吧。目前的成果是把SWF Tools中的jpeg2swf和png2swf两个程序放到了animation包中，在R中是sth2swf()这个函数，当然还没写说明文档什么的（[老大要笑了](http://cos.name/bbs/read.php?tid=17472):)），可以到[http://yixuan.cos.name/cn/2009/12/enhanced-animation-package/](http://yixuan.cos.name/cn/2009/12/enhanced-animation-package/)去下载，里面给了示例的代码。当然这个东西还非常初级，需要很多进一步的工作，等[yanlinlin](http://yanlinlin82.vicp.net/blog/)忙完了一定要好好跟他取取经。如果真的能把这块东西搞定了，那老大的animation包的实用性肯定会有很大提升的。
+记得老大之前说过一句话，就是程序员和网页设计者最抓狂的事就是要面向不同的平台编写不同的代码，这几天也实在是被跨平台的问题折磨得不轻。不过好在这几天趁机把C语言又学习了一番，而且还了解到更多的与GNU有关的内容，算是意外的收获吧。目前的成果是把SWF Tools中的`jpeg2swf`和`png2swf`两个程序放到了animation包中，在R中是`sth2swf()`这个函数，当然还没写说明文档什么的（[老大要笑了](http://cos.name/bbs/read.php?tid=17472):)），可以到[http://yixuan.cos.name/cn/2009/12/enhanced-animation-package/](http://yixuan.cos.name/cn/2009/12/enhanced-animation-package/)去下载，里面给了示例的代码。当然这个东西还非常初级，需要很多进一步的工作，等[yanlinlin](http://yanlinlin82.vicp.net/blog/)忙完了一定要好好跟他取取经。如果真的能把这块东西搞定了，那老大的animation包的实用性肯定会有很大提升的。
 
 而做到这一步我又不禁想起[肖楠](http://www.road2stat.com/)对于R环境安全的演讲。试想，既然这些工具可以嵌入到R中，那么恶意程序岂不是也可以进行类似的操作？而且把恶意代码写成C并编译的话，就更加难以被人发现了，毕竟读一段C代码一般要比读一段R代码更难。前两天COS被一些不速之客光临过了，这也让我们不得不审视一下当前网络的安全问题，攻防之战依然在继续啊。
 
-附：sth2swf()的说明。
-sth2swf(from, cmdargs)有两个参数，from可以取“jpeg”和“png”，说明你是要将什么格式的文件转成swf；cmdargs是命令行参数，参见SWF Tools的[官方说明](http://wiki.swftools.org/index.php/Main_Page)。
+附：`sth2swf()`的说明。  
+`sth2swf(from, cmdargs)`有两个参数，from可以取“jpeg”和“png”，说明你是要将什么格式的文件转成swf；cmdargs是命令行参数，参见SWF Tools的[官方说明](http://wiki.swftools.org/index.php/Main_Page)。

@@ -41,6 +41,7 @@ tags:
 说到预测的能力，也许大家会很自然地想到分类器的误分率。不错，被正确预测的样品的比例是判断分类器预测能力的一个重要指标，但是如果出现下面的情形：有5个新样本点，自身聚类的编号分别是1，1，1，2，2，而用已有数据判别的结果是2，2，2，1，1，如果直接拿它们进行对比的话，判对率是0，但实际上，这两组编号应该是完全吻合的。其中的原因就在于，聚类的编号其实是无序的，是可以任意调换的，如果我们要测量两组编号的吻合性，就需要消除其中序的概念。
 
 关于这个问题的解决后面会提及，现在还是从预测强度的计算着手。拿到一批数据，首先将其随机划分为训练集和测试集，然后分别对这两组数进行聚类（按需要选定一种聚类方法，并先假设聚类数k是已知的），这样训练集和测试集就分别得到了一列类别编号（记为trainID和testID1）。接下来用训练集及其编号对测试集进行判别，于是测试集就获得了第二列编号（记为testID2）。下面的工作就是衡量testID1和testID2之间的一致性程度。
+
 预测强度的做法是，先考虑testID1里面的每一个类，比如编号为1的所有样品，如果它们一共有n_k1个（k是总的聚类数），那么它们的两两配对就有n_k1(n_k1-1)/2种；接下来就考察每一种配对下，这两个样品是否在testID2中也被分在同一个组；计算出那些在testID2中也被分在同一组的配对所占的比例，然后重复这个过程，对所有的k个类都计算出相应的值；最后对这k个数值取最小值，就是当前聚类数k下的预测强度。
 
 用一张流程图来说明，就是：
@@ -49,435 +50,179 @@ tags:
 
 再举一个直观的例子。假设有一批新样品，自身聚类的编号是
 
-
-
-
-
-
-
-
-X1
-
-
-X2
-
-
-X3
-
-
-X4
-
-
-X5
-
-
-X6
-
-
-X7
-
-
-X8
-
-
-X9
-
-
-X10
-
-
-
-
-
-
-1
-
-
-1
-
-
-1
-
-
-1
-
-
-1
-
-
-1
-
-
-2
-
-
-2
-
-
-2
-
-
-2
-
-
+<table border="1" align="center">
+<tbody>
+<tr>
+<td width="37" valign="middle">X1</td>
+<td width="37" valign="middle">X2</td>
+<td width="37" valign="middle">X3</td>
+<td width="37" valign="middle">X4</td>
+<td width="37" valign="middle">X5</td>
+<td width="37" valign="middle">X6</td>
+<td width="37" valign="middle">X7</td>
+<td width="37" valign="middle">X8</td>
+<td width="37" valign="middle">X9</td>
+<td width="39" valign="middle">X10</td>
+</tr>
+<tr>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">2</td>
+<td width="39" valign="middle">2</td>
+</tr>
+</tbody>
+</table>
 
 被判别的编号是
 
-
-
-
-
-
-
-
-X1
-
-
-X2
-
-
-X3
-
-
-X4
-
-
-X5
-
-
-X6
-
-
-X7
-
-
-X8
-
-
-X9
-
-
-X10
-
-
-
-
-
-
-1
-
-
-1
-
-
-2
-
-
-1
-
-
-1
-
-
-2
-
-
-2
-
-
-2
-
-
-2
-
-
-1
-
-
+<table border="1" align="center">
+<tbody>
+<tr>
+<td width="37" valign="middle">X1</td>
+<td width="37" valign="middle">X2</td>
+<td width="37" valign="middle">X3</td>
+<td width="37" valign="middle">X4</td>
+<td width="37" valign="middle">X5</td>
+<td width="37" valign="middle">X6</td>
+<td width="37" valign="middle">X7</td>
+<td width="37" valign="middle">X8</td>
+<td width="37" valign="middle">X9</td>
+<td colspan="2" width="39" valign="middle">X10</td>
+</tr>
+<tr>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">1</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">2</td>
+<td width="37" valign="middle">2</td>
+<td width="39" valign="middle">1</td>
+</tr>
+</tbody>
+</table>
 
 那么，对于自身聚类中的第1个类，可以作出下面的这个矩阵：
 
-
-
-
-
-
-
-
- 
-
-
-X1
-
-
-X2
-
-
-X3
-
-
-X4
-
-
-X5
-
-
-X6
-
-
-
-
-
-
-X1
-
-
- 
-
-
-1
-
-
-0
-
-
-1
-
-
-1
-
-
-0
-
-
-
-
-
-
-X2
-
-
- 
-
-
- 
-
-
-0
-
-
-1
-
-
-1
-
-
-0
-
-
-
-
-
-
-X3
-
-
- 
-
-
- 
-
-
- 
-
-
-0
-
-
-0
-
-
-1
-
-
-
-
-
-
-X4
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
-1
-
-
-0
-
-
-
-
-
-
-X5
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
-0
-
-
-
-
-
-
-X6
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
+<table border="1" align="center">
+<tbody>
+<tr>
+<td width="37" valign="top"> </td>
+<td width="37" valign="middle">X1</td>
+<td width="37" valign="middle">X2</td>
+<td width="37" valign="middle">X3</td>
+<td width="37" valign="middle">X4</td>
+<td width="37" valign="middle">X5</td>
+<td width="39" valign="middle">X6</td>
+</tr>
+<tr>
+<td width="37" valign="top">X1</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top">1</td>
+<td width="37" valign="top">0</td>
+<td width="37" valign="top">1</td>
+<td width="37" valign="top">1</td>
+<td width="39" valign="top">0</td>
+</tr>
+<tr>
+<td width="37" valign="top">X2</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top">0</td>
+<td width="37" valign="top">1</td>
+<td width="37" valign="top">1</td>
+<td width="39" valign="top">0</td>
+</tr>
+<tr>
+<td width="37" valign="top">X3</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top">0</td>
+<td width="37" valign="top">0</td>
+<td width="39" valign="top">1</td>
+</tr>
+<tr>
+<td width="37" valign="top">X4</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top">1</td>
+<td width="39" valign="top">0</td>
+</tr>
+<tr>
+<td width="37" valign="top">X5</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="39" valign="top">0</td>
+</tr>
+<tr>
+<td width="37" valign="top">X6</td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="39" valign="top"> </td>
+</tr>
+</tbody>
+</table>
 
 其中如果两个点在判别编号中也一样，就记为1，否则就记为0。于是很容易得出判对的比例是7/15。
 
 同理，另一个类别的矩阵是
 
-
-
-
-
-
-
-
- 
-
-
-X7
-
-
-X8
-
-
-X9
-
-
-X10
-
-
-
-
-
-
-X7
-
-
- 
-
-
-1
-
-
-1
-
-
-0
-
-
-
-
-
-
-X8
-
-
- 
-
-
- 
-
-
-1
-
-
-0
-
-
-
-
-
-
-X9
-
-
- 
-
-
- 
-
-
- 
-
-
-0
-
-
-
-
-
-
-X10
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
+<table border="1" align="center">
+<tbody>
+<tr>
+<td width="39" valign="top"> </td>
+<td width="36" valign="middle">X7</td>
+<td width="37" valign="middle">X8</td>
+<td width="37" valign="middle">X9</td>
+<td width="40" valign="middle">X10</td>
+</tr>
+<tr>
+<td width="39" valign="top">X7</td>
+<td width="36" valign="top"> </td>
+<td width="37" valign="top">1</td>
+<td width="37" valign="top">1</td>
+<td width="40" valign="top">0</td>
+</tr>
+<tr>
+<td width="39" valign="top">X8</td>
+<td width="36" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top">1</td>
+<td width="40" valign="top">0</td>
+</tr>
+<tr>
+<td width="39" valign="top">X9</td>
+<td width="36" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="40" valign="top">0</td>
+</tr>
+<tr>
+<td width="39" valign="top">X10</td>
+<td width="36" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="37" valign="top"> </td>
+<td width="40" valign="top"> </td>
+</tr>
+</tbody>
+</table>
 
 比例为3/6=1/2。于是，当前聚类数2下的预测强度就是7/15和1/2中的最小值，即7/15。
 
@@ -504,7 +249,9 @@ X10
 
 
 这是一个值得思考的问题，因为事实上，当k=1，即数据只聚成一类时，预测强度是恒为1的。原因很简单，那就是因为，只要是聚成一类，那么所有的样本点都会落在同一个类中，因此没有任何一个配对会被错判。但是此时，我们并不能说聚类数为1时就一定是最好的——如果真是这样的话，聚类还有什么意义呢？
+
 所以这时候，我们就不能单纯地用最优化的思想去看待这个问题。我们应该首先看k>1时预测强度大致的取值，如果取值都比较小，那么我们也许可以认为这个数据本身就比较混杂，不适合做聚类，即承认k=1；而如果在某个聚类数k_0>1上预测强度达到了0.8、0.9这样的水平，那也许我们还是应该认为数据是有聚类的必要的。
+
 从之前的图中我们也可以得到一些启发：第一幅图的预测强度在k>1时就“一蹶不振”了，而后面两幅都在某个大于1的位置上有了一个接近于1的取值（在这个比较理想的模拟条件下其实就是等于1了），因此我们认为第一组数据应该聚成一类，而第二、第三组数据分别聚成两类和三类。
 
 
